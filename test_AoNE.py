@@ -1,34 +1,42 @@
+"""
+Test AoNE class
+"""
+import random
 from py_ecc import (
     optimized_bn128 as bn128,
 )
-import AoNE
-import random
+from aone import AoNE
+
 
 def test_main():
-    userNum = 5
+    """
+    Test AoNE class
+    """
+    user_num = 5
     pk = []
     sk = []
-    r = [random.randint(0, bn128.field_modulus) for i in range(userNum)]
-    x = [random.randint(0, bn128.field_modulus) for i in range(userNum)]
-    K_pk = []
+    r = [random.randint(0, bn128.field_modulus) for i in range(user_num)]
+    # x = [random.randint(0, bn128.field_modulus) for i in range(user_num)]
+    k_pk = []
     r_pk_2 = []
-    S_pk = []
-    
+    s_pk = []
+    aone = AoNE()
+
     # Key generation
-    for i in range(userNum):
-        tmpPk, tmpSk = AoNE.KeyGen()
-        pk.append(tmpPk)
-        sk.append(tmpSk)
+    for i in range(user_num):
+        tmp_pk, tmp_sk = aone.keygen()
+        pk.append(tmp_pk)
+        sk.append(tmp_sk)
 
     # All users encrypt data
-    for i in range(userNum):
-        K, r2, S, l = AoNE.Encrypt(sk[i], x[i], r[i], pk[:i]+pk[i+1:] , 12345)
-        K_pk.append(K)
+    for i in range(user_num):
+        k, r2, s, l = aone.encrypt(sk[i], r[i], pk[:i]+pk[i+1:], 12345)
+        k_pk.append(k)
         r_pk_2.append(r2)
-        S_pk.append(S)
-    
+        s_pk.append(s)
+
     # Decrypt each ciphertext
-    for i in range(userNum):
-        assert(AoNE.Decrypt(r[i],S_pk[:i]+S_pk[i+1:]) == K_pk[i])
-    
+    for i in range(user_num):
+        assert aone.decrypt(r[i], s_pk[:i]+s_pk[i+1:]) == k_pk[i]
+
     print("Test Finish!")
