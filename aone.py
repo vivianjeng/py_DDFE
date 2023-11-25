@@ -11,15 +11,15 @@ from py_ecc import (
 class AoNE:
     """AoNE class implementation"""
 
-    # Key Generation
-    # KeyGen() -> (pk,sk_pk)
-
     def keygen(self):
-        """Generate a key pair"""
+        """
+        Key Generation
+        KeyGen() -> (pk,sk_pk)
+        """
         t = random.randint(0, bn128.field_modulus)
         return (bn128.multiply(bn128.G2, t), t)
 
-    def encrypt(self, sk, r, pk, label):
+    def encrypt(self, sk, r, x, pk, label):
         """
         Encryption
         Encrypt(sk_pk, m) -> ct_pk
@@ -34,7 +34,7 @@ class AoNE:
         s = bn128.multiply(h_1, sk)
 
         # TODO: encrypt x with k
-        return k, bn128.multiply(bn128.G2, r), s, label
+        return k, x, bn128.multiply(bn128.G2, r), s, label
 
     def decrypt(self, r, s):
         """
