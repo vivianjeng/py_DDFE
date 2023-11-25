@@ -4,7 +4,7 @@ from py_ecc import (
 import AoNE
 import random
 
-def main():
+def test_main():
     userNum = 5
     pk = []
     sk = []
@@ -32,6 +32,3 @@ def main():
         assert(AoNE.Decrypt(r[i],S_pk[:i]+S_pk[i+1:]) == K_pk[i])
     
     print("Test Finish!")
-
-if __name__ == '__main__':
-    main()
